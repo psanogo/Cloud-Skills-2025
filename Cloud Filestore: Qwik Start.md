@@ -1,7 +1,7 @@
 <p><strong>☁️ Run in Cloud Shell:</strong></p>
 
 ```bash
-curl -LO raw.githubusercontent.com/ArcadeCrew/Google-Cloud-Labs/refs/heads/main/Cloud%20Filestore%20Qwik%20Start/arcadecrew.sh
+curl -LO https://raw.githubusercontent.com/chayandeokar/Cloud-Skills-2025/refs/heads/master/script%20file/gsp244.sh
 sudo chmod +x *.sh
 ./*.sh
 ```
