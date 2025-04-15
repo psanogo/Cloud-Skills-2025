@@ -49,6 +49,4 @@ gcloud filestore instances create nfs-server \
 --file-share=name="vol1",capacity=1TB \
 --network=name="default"
 
-# Final message
-echo -e "${RED_TEXT}${BOLD_TEXT}Subscribe my Channel (Arcade Crew):${RESET_FORMAT} ${BLUE_TEXT}${BOLD_TEXT}https://www.youtube.com/@Arcade61432${RESET_FORMAT}"
-echo
+
