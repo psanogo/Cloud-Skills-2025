@@ -41,8 +41,8 @@ sudo chmod +x *.sh
 
 ```bash
 curl -LO raw.githubusercontent.com/chayandeokar/Cloud-Skills-2025/refs/heads/master/script%20file/form2.sh
-sudo chmod +x arcadecrew.sh
-./arcadecrew.sh
+sudo chmod +x *.sh
+./*.sh
 ```
 </div>
 
@@ -94,8 +94,8 @@ sudo chmod +x *.sh
 
 ```bash
 curl -LO raw.githubusercontent.com/chayandeokar/Cloud-Skills-2025/refs/heads/master/script%20file/form4.sh
-sudo chmod +x arcadecrew.sh
-./arcadecrew.sh
+sudo chmod +x *.sh
+./*.sh
 ```
 </div>
 
