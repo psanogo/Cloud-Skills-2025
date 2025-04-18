@@ -2,7 +2,7 @@
 ### ⚙️ Execute the Following Commands in Cloud Shell
 
 ```
-curl -LO raw.githubusercontent.com/QUICK-GCP-LAB/2-Minutes-Labs-Solutions/main/Create%20an%20Internal%20Load%20Balancer/gsp216.sh
+curl -LO raw.githubusercontent.com/chayandeokar/Cloud-Skills-2025/refs/heads/master/script%20file/GSP041.sh
 
 sudo chmod +x *.sh
 
