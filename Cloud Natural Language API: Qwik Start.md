@@ -8,11 +8,11 @@ This guide is provided to support your educational journey in this lab. Please o
 Run in Cloudshell:  
 
 ```bash
-curl -LO raw.githubusercontent.com/ArcadeCrew/Google-Cloud-Labs/refs/heads/main/Cloud%20Natural%20Language%20API%20Qwik%20Start/arcadecrew.sh
+curl -LO raw.githubusercontent.com/chayandeokar/Cloud-Skills-2025/refs/heads/master/script%20file/GSP097.sh
 
-sudo chmod +x arcadecrew.sh
+sudo chmod +x *.sh
 
-./arcadecrew.sh
+./*.sh
 ```
 ---
 
