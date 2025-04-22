@@ -2,9 +2,9 @@
 <p><strong>☁️ Run in Cloud Shell:</strong></p>
 
 ```bash
-curl -LO raw.githubusercontent.com/ArcadeCrew/Google-Cloud-Labs/refs/heads/main/Google%20Cloud%20SDK%20Qwik%20Start%20-%20RedhatCentos/arcadecrew.sh
-sudo chmod +x arcadecrew.sh
-./arcadecrew.sh
+curl -LO raw.githubusercontent.com/chayandeokar/Cloud-Skills-2025/refs/heads/master/script%20file/GSP122.sh
+sudo chmod +x *.sh
+./*.sh
 ```
 
 </div>
