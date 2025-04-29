@@ -52,5 +52,5 @@
       }
     }
   ],
-  "model": "chat-bison"
+  "model": "gemini-2.0-flash-001"
 }
