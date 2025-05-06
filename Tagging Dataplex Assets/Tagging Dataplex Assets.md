@@ -2,8 +2,8 @@
 
 ```
 curl -LO raw.githubusercontent.com/chayandeokar/Cloud-Skills-2025/refs/heads/master/Tagging%20Dataplex%20Assets/GSP1145.sh
-sudo chmod +x .sh
-./.sh
+sudo chmod +x *.sh
+./*.sh
 ```
 ---
 
