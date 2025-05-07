@@ -2,10 +2,14 @@
 
 set -e
 
-# Set variables
+# Prompt for user input
+read -p "Enter your GCP region (e.g. us-central1): " REGION
+read -p "Enter your GCP zone (e.g. us-central1-a): " ZONE
+
+# Set project ID and region
 export PROJECT_ID=$(gcloud config get-value project)
-export REGION="your-region"  # <-- Replace with your region, e.g., us-central1
-export ZONE="your-zone"      # <-- Replace with your zone, e.g., us-central1-a
+export REGION=$REGION
+export ZONE=$ZONE
 
 # Set compute region
 gcloud config set compute/region $REGION
