@@ -1,84 +1,76 @@
 #!/bin/bash
 
-# Colors for terminal output
+# Colors for output formatting
 RESET="\033[0m"
 BOLD="\033[1m"
+GREEN="\033[32m"
 CYAN="\033[36m"
 YELLOW="\033[33m"
 BLUE="\033[34m"
-GREEN="\033[32m"
 
 echo -e "${GREEN}${BOLD}Starting Execution${RESET}"
 
 # Step 1: Set environment variables
 echo -e "${CYAN}${BOLD}Setting environment variables...${RESET}"
 export PROJECT_ID=$(gcloud config get-value project)
-export REGION="us-central1"
-export FUNCTION_NAME="cf-go"
+export REGION="us-west1"
+export FUNCTION_NAME="cf-pubsub"
+export TOPIC_NAME="cf-pubsub"
 
-# Step 2: Create source code for the Cloud Function
+# Step 2: Create Pub/Sub topic if not exists
+echo -e "${YELLOW}${BOLD}Ensuring Pub/Sub topic exists...${RESET}"
+gcloud pubsub topics create $TOPIC_NAME --quiet || true
+
+# Step 3: Create sample Go function
 echo -e "${YELLOW}${BOLD}Creating sample Go function...${RESET}"
 mkdir -p cloud-function
 cat > cloud-function/main.go <<EOF
-package function
+package main
 
 import (
-	"fmt"
-	"net/http"
+	"context"
+	"encoding/json"
+	"log"
 )
 
-func Function(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "Hello from cf-go Cloud Run Function!")
+type PubSubMessage struct {
+	Data []byte \`json:"data"\`
+}
+
+func HelloPubSub(ctx context.Context, m PubSubMessage) error {
+	log.Printf("Hello from Pub/Sub! Message: %s", string(m.Data))
+	return nil
 }
 EOF
 
 cat > cloud-function/go.mod <<EOF
-module function
+module example.com/hello
 
-go 1.21
+go 1.20
 EOF
 
-# Step 3: Deploy the Cloud Function (2nd Gen)
+# Step 4: Deploy Cloud Function (2nd Gen) with Pub/Sub trigger
 echo -e "${BLUE}${BOLD}Deploying Cloud Function: ${FUNCTION_NAME}...${RESET}"
-gcloud functions deploy ${FUNCTION_NAME} \
+gcloud functions deploy $FUNCTION_NAME \
   --gen2 \
-  --runtime=go121 \
-  --region=${REGION} \
+  --runtime=go120 \
+  --region=$REGION \
   --source=cloud-function \
-  --entry-point=Function \
-  --trigger-http \
+  --entry-point=HelloPubSub \
+  --trigger-topic=$TOPIC_NAME \
   --max-instances=5 \
-  --allow-unauthenticated
+  --service-account="Cloud Run functions demo account" \
+  --quiet
 
 echo -e "${GREEN}${BOLD}Deployment complete!${RESET}"
 
-# Function to display a random congratulatory message
-function random_congrats() {
-  MESSAGES=(
-    "${GREEN}Congratulations! Cloud Function deployed successfully!${RESET}"
-    "${CYAN}Awesome job! Your function is live and ready!${RESET}"
-    "${YELLOW}Well done! You've mastered function deployment!${RESET}"
-    "${BLUE}Success! Another step forward in cloud development!${RESET}"
-  )
-  RANDOM_INDEX=$((RANDOM % ${#MESSAGES[@]}))
-  echo -e "${BOLD}${MESSAGES[$RANDOM_INDEX]}"
-}
+# Congratulatory message
+MESSAGES=(
+  "${GREEN}Great! Cloud Function with Pub/Sub trigger deployed successfully!${RESET}"
+  "${CYAN}Awesome job! Your Go-based Pub/Sub function is live!${RESET}"
+  "${YELLOW}Well done! You've deployed using 2nd Gen Cloud Functions!${RESET}"
+)
+RANDOM_INDEX=$((RANDOM % ${#MESSAGES[@]}))
+echo -e "${BOLD}${MESSAGES[$RANDOM_INDEX]}"
 
-# Display a random congratulatory message
-random_congrats
-
-echo -e "\n"  # Adding one blank line
-
-# Remove unwanted files from home directory
-cd ~
-remove_files() {
-  for file in *; do
-    if [[ "$file" == gsp* || "$file" == arc* || "$file" == shell* ]]; then
-      if [[ -f "$file" ]]; then
-        rm "$file"
-        echo "File removed: $file"
-      fi
-    fi
-  done
-}
-remove_files
+echo -e "\n"
