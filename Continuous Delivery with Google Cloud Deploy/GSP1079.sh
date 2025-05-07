@@ -2,18 +2,6 @@
 
 set -e
 
-# Prompt for user input
-read -p "Enter your GCP region (e.g. us-central1): " REGION
-read -p "Enter your GCP zone (e.g. us-central1-a): " ZONE
-
-# Set project ID and region
-export PROJECT_ID=$(gcloud config get-value project)
-export REGION=$REGION
-export ZONE=$ZONE
-
-# Set compute region
-gcloud config set compute/region $REGION
-
 # Enable required services
 gcloud services enable \
     container.googleapis.com \
