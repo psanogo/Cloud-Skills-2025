@@ -1,76 +1,53 @@
-#!/bin/bash
+echo ""
+echo ""
 
-# Colors for output formatting
-RESET="\033[0m"
-BOLD="\033[1m"
-GREEN="\033[32m"
-CYAN="\033[36m"
-YELLOW="\033[33m"
-BLUE="\033[34m"
+# STEP 1: Set region
+read -p "Export REGION :- " REGION
 
-echo -e "${GREEN}${BOLD}Starting Execution${RESET}"
+# STEP 2: Create working directory
+mkdir ~/hello-go && cd ~/hello-go
 
-# Step 1: Set environment variables
-echo -e "${CYAN}${BOLD}Setting environment variables...${RESET}"
-export PROJECT_ID=$(gcloud config get-value project)
-export REGION="us-west1"
-export FUNCTION_NAME="cf-pubsub"
-export TOPIC_NAME="cf-pubsub"
-
-# Step 2: Create Pub/Sub topic if not exists
-echo -e "${YELLOW}${BOLD}Ensuring Pub/Sub topic exists...${RESET}"
-gcloud pubsub topics create $TOPIC_NAME --quiet || true
-
-# Step 3: Create sample Go function
-echo -e "${YELLOW}${BOLD}Creating sample Go function...${RESET}"
-mkdir -p cloud-function
-cat > cloud-function/main.go <<EOF
-package main
+# STEP 3: Create main.go file
+cat > main.go <<EOF_END
+package function
 
 import (
-	"context"
-	"encoding/json"
-	"log"
+    "fmt"
+    "net/http"
 )
 
-type PubSubMessage struct {
-	Data []byte \`json:"data"\`
+// HelloGo is the entry point
+func HelloGo(w http.ResponseWriter, r *http.Request) {
+    fmt.Fprint(w, "Hello from Cloud Functions (Go 2nd Gen)!")
 }
+EOF_END
 
-func HelloPubSub(ctx context.Context, m PubSubMessage) error {
-	log.Printf("Hello from Pub/Sub! Message: %s", string(m.Data))
-	return nil
-}
-EOF
+# STEP 4: Create go.mod file
+cat > go.mod <<EOF_END
+module example.com/hellogo
 
-cat > cloud-function/go.mod <<EOF
-module example.com/hello
+go 1.21
+EOF_END
 
-go 1.20
-EOF
-
-# Step 4: Deploy Cloud Function (2nd Gen) with Pub/Sub trigger
-echo -e "${BLUE}${BOLD}Deploying Cloud Function: ${FUNCTION_NAME}...${RESET}"
-gcloud functions deploy $FUNCTION_NAME \
+# STEP 5: Deploy the Go-based Cloud Function
+gcloud functions deploy cf-go \
   --gen2 \
-  --runtime=go120 \
+  --runtime=go121 \
   --region=$REGION \
-  --source=cloud-function \
-  --entry-point=HelloPubSub \
-  --trigger-topic=$TOPIC_NAME \
-  --max-instances=5 \
-  --service-account="Cloud Run functions demo account" \
-  --quiet
+  --trigger-http \
+  --allow-unauthenticated \
+  --entry-point=HelloGo \
+  --source=. \
+  --min-instances=5
 
-echo -e "${GREEN}${BOLD}Deployment complete!${RESET}"
 
-# Congratulatory message
-MESSAGES=(
-  "${GREEN}Great! Cloud Function with Pub/Sub trigger deployed successfully!${RESET}"
-  "${CYAN}Awesome job! Your Go-based Pub/Sub function is live!${RESET}"
-  "${YELLOW}Well done! You've deployed using 2nd Gen Cloud Functions!${RESET}"
-)
-RANDOM_INDEX=$((RANDOM % ${#MESSAGES[@]}))
-echo -e "${BOLD}${MESSAGES[$RANDOM_INDEX]}"
 
-echo -e "\n"
+echo "n" | gcloud functions deploy cf-pubsub \
+  --gen2 \
+  --region=$REGION \
+  --runtime=go121 \
+  --trigger-topic=cf-pubsub \
+  --min-instances=5 \
+  --entry-point=helloWorld \
+  --source=. \
+  --allow-unauthenticated
