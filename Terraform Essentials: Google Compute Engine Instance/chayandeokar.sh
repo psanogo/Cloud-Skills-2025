@@ -32,7 +32,7 @@ terraform {
     }
   }
   backend "gcs" {
-    bucket = ""PROJECT_ID"-tf-state"
+    bucket = "$PROJECT_ID"-tf-state"
     prefix = "terraform/state"
   }
 }
@@ -66,7 +66,7 @@ cat > variables.tf <<EOF_END
 variable "project_id" {
   type        = string
   description = "The ID of the Google Cloud project"
-  default = ""PROJECT_ID""
+  default = "$PROJECT_ID"
 }
 
 variable "region" {
