@@ -18,7 +18,7 @@ gcloud auth login
 
 gcloud config set project $PROJECT_ID
 
-gsutil mb -l "REGION" gs://$PROJECT_ID-tf-state
+gsutil mb -l "$REGION" gs://$PROJECT_ID-tf-state
 
 gsutil versioning set on gs://$PROJECT_ID-tf-state
 
@@ -72,13 +72,13 @@ variable "project_id" {
 variable "region" {
   type        = string
   description = "The region to deploy resources in"
-  default     = ""REGION""
+  default     = "$REGION"
 }
 
 variable "zone" {
   type        = string
   description = "The zone to deploy resources in"
-  default     = ""ZONE""
+  default     = "$ZONE"
 }
 EOF_END
 
