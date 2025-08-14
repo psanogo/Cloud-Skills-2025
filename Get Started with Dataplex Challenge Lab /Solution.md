@@ -4,7 +4,7 @@
 export LOCATION=
 ```
 ```
-curl -LO raw.githubusercontent.com/Cloud-Wala-Banda/Labs-Solutions/main/Get%20Started%20with%20Dataplex%20Challenge%20Lab/arc117.sh
+curl -LO raw.githubusercontent.com/chayandeokar/Cloud-Skills-2025/refs/heads/master/Get%20Started%20with%20Dataplex%20Challenge%20Lab%20/arc117.sh
 
 sudo chmod +x arc117.sh
 
